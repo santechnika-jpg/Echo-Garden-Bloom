@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Echo Garden maskable icon">
+  <rect width="512" height="512" fill="#061c1f"/>
+  <circle cx="256" cy="256" r="190" fill="#7ee6a8" opacity=".14"/>
+  <circle cx="256" cy="256" r="142" fill="#061c1f" opacity=".24"/>
+  <path d="M256 86c55 78 88 129 88 190a88 88 0 0 1-176 0c0-61 33-112 88-190Z" fill="#7ee6a8"/>
+  <circle cx="256" cy="289" r="34" fill="#f2cf73"/>
+  <path d="M168 346c50 45 126 48 176 0" stroke="#83c9ff" stroke-width="22" stroke-linecap="round" fill="none" opacity=".75"/>
+</svg>

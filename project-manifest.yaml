@@ -1,0 +1,28 @@
+project_id: echo_garden
+project_type: static_mobile_web_game
+source_of_truth:
+  path: README.md
+protected_paths:
+  - project-manifest.yaml
+  - README.md
+default_permissions:
+  github: read_only
+  filesystem: local_edit_allowed
+requires_user_approval:
+  - source_of_truth_change
+  - governance_change
+  - github_write
+  - release
+  - milestone_completion
+allowed_skills:
+  - project-context-router
+  - frontend-skill
+  - github
+blocked_actions:
+  - destructive_commands_without_confirmation
+  - credential_use_without_confirmation
+  - external_api_use_without_confirmation
+local_instructions: []
+audit:
+  mode: brief
+  destination: chat

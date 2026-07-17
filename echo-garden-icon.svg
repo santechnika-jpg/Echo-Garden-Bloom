@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Echo Garden icon">
+  <rect width="512" height="512" rx="108" fill="#061c1f"/>
+  <circle cx="256" cy="256" r="164" fill="#7ee6a8" opacity=".16"/>
+  <circle cx="256" cy="256" r="118" fill="#83c9ff" opacity=".1"/>
+  <path d="M256 82c54 78 88 132 88 193a88 88 0 0 1-176 0c0-61 34-115 88-193Z" fill="#7ee6a8"/>
+  <path d="M188 347c46 42 108 50 151 20 14-10 23-22 28-34" fill="none" stroke="#83c9ff" stroke-width="24" stroke-linecap="round" opacity=".78"/>
+  <circle cx="256" cy="290" r="35" fill="#f2cf73"/>
+  <circle cx="186" cy="190" r="12" fill="#ff8f7b"/>
+  <circle cx="342" cy="196" r="10" fill="#66eadc"/>
+</svg>

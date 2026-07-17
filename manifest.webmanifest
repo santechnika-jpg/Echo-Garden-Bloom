@@ -1,0 +1,25 @@
+{
+  "name": "Echo Garden",
+  "short_name": "Echo Garden",
+  "description": "Ramus mobilus atminties žaidimas apie šviesos ir garso sekas naktiniame sode.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#061c1f",
+  "theme_color": "#061c1f",
+  "icons": [
+    {
+      "src": "icons/echo-garden-icon.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/echo-garden-maskable.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="lt">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#061c1f">
+    <meta name="description" content="Echo Garden - ramus mobilus atminties žaidimas apie garsų ir šviesos sekas naktiniame sode.">
+    <title>Echo Garden</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="styles.css?v=11">
+  </head>
+  <body>
+    <main class="game-shell" aria-label="Echo Garden žaidimas">
+      <canvas id="ambientCanvas" class="ambient-canvas" aria-hidden="true"></canvas>
+
+      <section class="garden-stage" aria-label="Naktinis sodas">
+        <div class="topbar" aria-label="Žaidimo progresas">
+          <div class="brand">
+            <span class="brand-mark" aria-hidden="true"></span>
+            <div>
+              <h1>Echo Garden</h1>
+              <p id="stateText">Paliesk „Pradėti“ ir įsimink sodo aidą.</p>
+              <span class="version-badge" aria-label="Žaidimo versija">v11</span>
+            </div>
+          </div>
+          <button id="soundToggle" class="pill-button sound-button" type="button" aria-label="Išjungti garsą" aria-pressed="true">
+            Garsas įj.
+          </button>
+        </div>
+
+        <div class="stats-row" aria-label="Raundo informacija">
+          <div>
+            <span>Raundas</span>
+            <strong id="roundValue">0</strong>
+          </div>
+          <div>
+            <span>Seka</span>
+            <strong id="lengthValue">3</strong>
+          </div>
+          <div>
+            <span>Geriausias</span>
+            <strong id="bestValue">0</strong>
+          </div>
+          <div>
+            <span>Serija</span>
+            <strong id="streakValue">0</strong>
+          </div>
+        </div>
+
+        <details class="settings-panel">
+          <summary>
+            <span>Nustatymai</span>
+            <strong id="modeSummary">Klasika</strong>
+          </summary>
+          <div class="settings-body">
+            <div class="mode-row" aria-label="Žaidimo režimas">
+              <button id="modeClassic" class="mode-button active" type="button" data-mode="classic" aria-pressed="true">Klasika</button>
+              <button id="modeZen" class="mode-button" type="button" data-mode="zen" aria-pressed="false">Zen</button>
+              <button id="modeDaily" class="mode-button" type="button" data-mode="daily" aria-pressed="false">Dienos</button>
+              <button id="modePractice" class="mode-button" type="button" data-mode="practice" aria-pressed="false">Lėtas</button>
+            </div>
+            <div class="preference-row" aria-label="Patogumo nustatymai">
+              <button id="motionToggle" class="quiet-button" type="button" aria-label="Sumažinti judesį" aria-pressed="false">Mažiau judesio</button>
+              <button id="contrastToggle" class="quiet-button" type="button" aria-label="Įjungti ryškų kontrastą" aria-pressed="false">Ryškus kontrastas</button>
+            </div>
+          </div>
+        </details>
+
+        <div id="garden" class="garden" aria-label="Interaktyvūs švytintys augalai">
+          <button class="plant plant-fern" data-plant="0" type="button" aria-label="Žalsvas paparčio impulsas">
+            <span class="hit-area"></span>
+            <span class="plant-shape">
+              <span class="leaf leaf-a"></span>
+              <span class="leaf leaf-b"></span>
+              <span class="leaf leaf-c"></span>
+              <span class="core"></span>
+            </span>
+          </button>
+
+          <button class="plant plant-orchid" data-plant="1" type="button" aria-label="Koralinis orchidėjos impulsas">
+            <span class="hit-area"></span>
+            <span class="plant-shape">
+              <span class="petal petal-a"></span>
+              <span class="petal petal-b"></span>
+              <span class="petal petal-c"></span>
+              <span class="core"></span>
+            </span>
+          </button>
+
+          <button class="plant plant-mooncap" data-plant="2" type="button" aria-label="Melsvas mėnulio grybo impulsas">
+            <span class="hit-area"></span>
+            <span class="plant-shape">
+              <span class="cap"></span>
+              <span class="stem"></span>
+              <span class="core"></span>
+            </span>
+          </button>
+
+          <button class="plant plant-lantern" data-plant="3" type="button" aria-label="Auksinis žibinto žiedo impulsas">
+            <span class="hit-area"></span>
+            <span class="plant-shape">
+              <span class="bell"></span>
+              <span class="thread"></span>
+              <span class="core"></span>
+            </span>
+          </button>
+
+          <button class="plant plant-reed" data-plant="4" type="button" aria-label="Turkio nendrės impulsas">
+            <span class="hit-area"></span>
+            <span class="plant-shape">
+              <span class="reed reed-a"></span>
+              <span class="reed reed-b"></span>
+              <span class="reed reed-c"></span>
+              <span class="core"></span>
+            </span>
+          </button>
+
+          <button class="plant plant-ember" data-plant="5" type="button" aria-label="Šiltas gintarinis samanų impulsas">
+            <span class="hit-area"></span>
+            <span class="plant-shape">
+              <span class="moss moss-a"></span>
+              <span class="moss moss-b"></span>
+              <span class="moss moss-c"></span>
+              <span class="core"></span>
+            </span>
+          </button>
+        </div>
+
+        <div class="bloom-meter" aria-label="Sodo žydėjimo progresas">
+          <span class="bloom bloom-a"></span>
+          <span class="bloom bloom-b"></span>
+          <span class="bloom bloom-c"></span>
+          <span class="bloom bloom-d"></span>
+          <span class="bloom bloom-e"></span>
+          <strong id="bloomText">Sodas miega</strong>
+        </div>
+
+        <div id="messagePanel" class="message-panel" role="status" aria-live="polite">
+          Pradžia: 3 impulsai. Kiekvienas teisingas raundas prideda dar vieną aidą.
+        </div>
+
+        <div class="controls" aria-label="Žaidimo valdymas">
+          <button id="startButton" class="primary-button" type="button" aria-label="Pradėti žaidimą">Pradėti</button>
+          <button id="replayButton" class="secondary-button" type="button" aria-label="Pakartoti seką" disabled>Pakartoti seką</button>
+          <button id="pauseButton" class="secondary-button" type="button" aria-label="Pauzė" disabled>Pauzė</button>
+          <button id="resetButton" class="quiet-button" type="button" aria-label="Atstatyti">Atstatyti</button>
+        </div>
+      </section>
+    </main>
+
+    <script src="game.js?v=11" defer></script>
+  </body>
+</html>

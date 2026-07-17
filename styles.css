@@ -1,0 +1,951 @@
+:root {
+  color-scheme: dark;
+  --bg: #061c1f;
+  --bg-deep: #031113;
+  --panel: rgba(9, 42, 43, 0.58);
+  --panel-soft: rgba(221, 248, 225, 0.08);
+  --text: #e9f8ef;
+  --muted: #a9c9c1;
+  --line: rgba(201, 244, 226, 0.18);
+  --green: #7ee6a8;
+  --coral: #ff8f7b;
+  --blue: #83c9ff;
+  --gold: #f2cf73;
+  --teal: #66eadc;
+  --ember: #ffb36a;
+  --safe-bottom: max(18px, env(safe-area-inset-bottom));
+  --glass-top: rgba(255, 255, 255, 0.08);
+  --glass-bottom: rgba(2, 18, 19, 0.38);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--bg-deep);
+  color: var(--text);
+}
+
+body {
+  min-height: 100svh;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior: none;
+}
+
+button {
+  font: inherit;
+}
+
+.game-shell {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(54, 107, 90, 0.26), transparent 42%),
+    radial-gradient(circle at 12% 16%, rgba(126, 230, 168, 0.12), transparent 28%),
+    linear-gradient(180deg, #082628 0%, #061c1f 52%, #031113 100%);
+}
+
+.ambient-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.reduced-motion .ambient-canvas {
+  opacity: 0.34;
+}
+
+.garden-stage {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: auto auto auto minmax(360px, 1fr) auto auto;
+  gap: 11px;
+  padding: max(18px, env(safe-area-inset-top)) 18px var(--safe-bottom);
+}
+
+.topbar,
+.stats-row,
+.settings-panel,
+.bloom-meter,
+.mode-row,
+.controls {
+  width: min(100%, 560px);
+  margin: 0 auto;
+}
+
+.garden-stage::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.055), transparent 28%),
+    radial-gradient(circle at 50% 18%, rgba(102, 234, 220, 0.12), transparent 34%);
+}
+
+.topbar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 10px;
+}
+
+.brand-mark {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, rgba(233, 248, 239, 0.95) 0 8%, transparent 9%),
+    conic-gradient(from 18deg, var(--green), var(--gold), var(--coral), var(--blue), var(--green));
+  box-shadow: 0 0 22px rgba(126, 230, 168, 0.42);
+  opacity: 0.92;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.35rem, 5vw, 2rem);
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.brand p {
+  max-width: 25rem;
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.version-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  margin-top: 6px;
+  padding: 2px 8px;
+  border: 1px solid rgba(201, 244, 226, 0.24);
+  border-radius: 999px;
+  background: rgba(5, 24, 26, 0.72);
+  color: #dffbee;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.stats-row div {
+  min-height: 58px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--glass-top), var(--glass-bottom));
+  backdrop-filter: blur(12px);
+}
+
+.stats-row span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
+.stats-row strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.settings-panel {
+  border: 1px solid rgba(201, 244, 226, 0.14);
+  border-radius: 8px;
+  background: rgba(2, 18, 19, 0.26);
+  backdrop-filter: blur(12px);
+}
+
+.settings-panel summary {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 12px;
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+}
+
+.settings-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+.settings-panel summary::after {
+  content: "+";
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(201, 244, 226, 0.14);
+  border-radius: 50%;
+  color: var(--text);
+}
+
+.settings-panel[open] summary::after {
+  content: "-";
+}
+
+.settings-panel summary strong {
+  margin-left: auto;
+  color: var(--text);
+  font-size: 0.86rem;
+}
+
+.settings-body {
+  display: grid;
+  gap: 8px;
+  padding: 0 8px 8px;
+}
+
+.mode-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+
+.preference-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mode-button {
+  min-height: 36px;
+  border: 1px solid rgba(201, 244, 226, 0.14);
+  border-radius: 8px;
+  padding: 0 8px;
+  background: rgba(5, 24, 26, 0.56);
+  color: var(--muted);
+}
+
+.mode-button.active {
+  border-color: rgba(126, 230, 168, 0.78);
+  background: rgba(126, 230, 168, 0.14);
+  color: var(--text);
+}
+
+.garden {
+  position: relative;
+  width: min(100%, 560px);
+  min-height: 360px;
+  margin: 0 auto;
+  border: 1px solid rgba(201, 244, 226, 0.13);
+  border-radius: 30px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.045), transparent 28%),
+    radial-gradient(ellipse at 50% 52%, rgba(24, 88, 72, 0.42), transparent 62%),
+    radial-gradient(ellipse at 44% 62%, rgba(6, 48, 44, 0.72), transparent 70%);
+  box-shadow:
+    inset 0 0 88px rgba(4, 13, 14, 0.78),
+    0 28px 90px rgba(0, 0, 0, 0.24);
+  isolation: isolate;
+  overflow: hidden;
+  transition: filter 220ms ease, opacity 220ms ease;
+}
+
+.garden::before,
+.garden::after {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.garden::before {
+  border: 1px solid rgba(182, 240, 213, 0.1);
+  box-shadow: inset 0 0 44px rgba(126, 230, 168, 0.08);
+}
+
+.garden::after {
+  opacity: 0;
+  background:
+    radial-gradient(circle at 24% 22%, rgba(242, 207, 115, 0.26), transparent 11%),
+    radial-gradient(circle at 76% 28%, rgba(131, 201, 255, 0.22), transparent 10%),
+    radial-gradient(circle at 54% 80%, rgba(255, 143, 123, 0.18), transparent 10%);
+  transition: opacity 700ms ease;
+}
+
+.level-5 .garden::after {
+  opacity: 0.45;
+}
+
+.level-10 .garden {
+  filter: saturate(1.08);
+}
+
+.level-15 .garden {
+  box-shadow:
+    inset 0 0 92px rgba(4, 13, 14, 0.7),
+    0 0 70px rgba(126, 230, 168, 0.16),
+    0 28px 90px rgba(0, 0, 0, 0.24);
+}
+
+.plant {
+  --accent: var(--green);
+  position: absolute;
+  width: 116px;
+  height: 116px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  outline-offset: 7px;
+}
+
+.plant:disabled {
+  cursor: default;
+}
+
+.plant:focus-visible,
+.mode-button:focus-visible,
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.quiet-button:focus-visible,
+.pill-button:focus-visible {
+  outline: 3px solid rgba(233, 248, 239, 0.88);
+  outline-offset: 3px;
+}
+
+.hit-area {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+.plant-shape {
+  position: absolute;
+  inset: 22px;
+  border-radius: 50%;
+  filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent), transparent 46%));
+  animation: breathe 3.8s ease-in-out infinite;
+}
+
+.plant-shape {
+  pointer-events: none;
+}
+
+.plant:nth-child(2n) .plant-shape {
+  animation-duration: 4.4s;
+}
+
+.plant:nth-child(3n) .plant-shape {
+  animation-duration: 5s;
+}
+
+.core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 16px var(--accent), 0 0 34px color-mix(in srgb, var(--accent), transparent 45%);
+  transform: translate(-50%, -50%);
+}
+
+.ripple,
+.trail {
+  position: absolute;
+  inset: 24px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.ripple,
+.trail,
+.is-input .plant:not(:disabled)::before {
+  display: none !important;
+  animation: none !important;
+  opacity: 0 !important;
+}
+
+.ripple {
+  border: 2px solid color-mix(in srgb, var(--accent), white 18%);
+}
+
+.trail {
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent), transparent 42%), transparent 66%);
+  filter: blur(10px);
+}
+
+.plant.active .plant-shape {
+  animation: plantArtworkFlash 540ms ease-out !important;
+  transform: scale(1.2) !important;
+  filter:
+    brightness(1.82)
+    saturate(1.56)
+    drop-shadow(0 0 18px color-mix(in srgb, var(--accent), white 18%))
+    drop-shadow(0 0 38px color-mix(in srgb, var(--accent), transparent 12%)) !important;
+}
+
+.plant.active .leaf,
+.plant.active .petal,
+.plant.active .cap,
+.plant.active .stem,
+.plant.active .bell,
+.plant.active .thread,
+.plant.active .reed,
+.plant.active .moss,
+.plant.active .core {
+  background: color-mix(in srgb, var(--accent), #ffffff 38%) !important;
+  box-shadow:
+    0 0 20px color-mix(in srgb, var(--accent), white 16%),
+    0 0 44px color-mix(in srgb, var(--accent), transparent 18%) !important;
+}
+
+.plant.active .ripple {
+  animation: ripple 560ms ease-out;
+}
+
+.plant.active .trail {
+  animation: trail 940ms ease-out;
+}
+
+.plant-fern {
+  --accent: var(--green);
+  left: 27%;
+  top: 25%;
+}
+
+.plant-orchid {
+  --accent: var(--coral);
+  left: 73%;
+  top: 26%;
+}
+
+.plant-mooncap {
+  --accent: var(--blue);
+  left: 50%;
+  top: 43%;
+}
+
+.plant-lantern {
+  --accent: var(--gold);
+  left: 28%;
+  top: 69%;
+}
+
+.plant-reed {
+  --accent: var(--teal);
+  left: 74%;
+  top: 68%;
+}
+
+.plant-ember {
+  --accent: var(--ember);
+  left: 50%;
+  top: 83%;
+}
+
+.leaf,
+.petal,
+.cap,
+.stem,
+.bell,
+.thread,
+.reed,
+.moss {
+  position: absolute;
+  display: block;
+  background: color-mix(in srgb, var(--accent), #dffbee 18%);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent), transparent 40%);
+}
+
+.leaf {
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 48px;
+  border-radius: 100% 10% 100% 10%;
+  transform-origin: 50% 100%;
+}
+
+.leaf-a {
+  transform: translate(-50%, -100%) rotate(-28deg);
+}
+
+.leaf-b {
+  transform: translate(-50%, -100%) rotate(0deg);
+}
+
+.leaf-c {
+  transform: translate(-50%, -100%) rotate(28deg);
+}
+
+.petal {
+  left: 50%;
+  top: 50%;
+  width: 34px;
+  height: 26px;
+  border-radius: 70% 40% 70% 40%;
+  transform-origin: 0 50%;
+}
+
+.petal-a {
+  transform: rotate(-142deg) translateX(4px);
+}
+
+.petal-b {
+  transform: rotate(-38deg) translateX(4px);
+}
+
+.petal-c {
+  transform: rotate(90deg) translateX(3px);
+}
+
+.cap {
+  left: 15px;
+  top: 14px;
+  width: 52px;
+  height: 30px;
+  border-radius: 52px 52px 12px 12px;
+}
+
+.stem {
+  left: 35px;
+  top: 37px;
+  width: 14px;
+  height: 36px;
+  border-radius: 10px;
+  opacity: 0.78;
+}
+
+.bell {
+  left: 22px;
+  top: 19px;
+  width: 39px;
+  height: 50px;
+  border-radius: 50% 50% 58% 58%;
+  clip-path: polygon(50% 0, 92% 35%, 76% 100%, 24% 100%, 8% 35%);
+}
+
+.thread {
+  left: 40px;
+  top: 4px;
+  width: 5px;
+  height: 30px;
+  border-radius: 5px;
+  opacity: 0.75;
+}
+
+.reed {
+  bottom: 18px;
+  width: 8px;
+  height: 58px;
+  border-radius: 8px 8px 2px 2px;
+  transform-origin: 50% 100%;
+}
+
+.reed-a {
+  left: 27px;
+  transform: rotate(-16deg);
+}
+
+.reed-b {
+  left: 40px;
+  height: 68px;
+}
+
+.reed-c {
+  left: 53px;
+  transform: rotate(15deg);
+}
+
+.moss {
+  top: 38px;
+  width: 30px;
+  height: 23px;
+  border-radius: 50%;
+}
+
+.moss-a {
+  left: 18px;
+}
+
+.moss-b {
+  left: 35px;
+  top: 28px;
+}
+
+.moss-c {
+  left: 48px;
+}
+
+.message-panel {
+  width: min(100%, 560px);
+  min-height: 44px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border: 1px solid rgba(201, 244, 226, 0.14);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--glass-top), var(--glass-bottom));
+  color: #d8f2e7;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.3;
+  backdrop-filter: blur(12px);
+}
+
+.bloom-meter {
+  min-height: 38px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+}
+
+.bloom-meter strong {
+  color: var(--muted);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.bloom {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(201, 244, 226, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(201, 244, 226, 0.1);
+  transition: background 280ms ease, box-shadow 280ms ease, transform 280ms ease;
+}
+
+body[data-bloom="1"] .bloom-a,
+body[data-bloom="2"] .bloom-a,
+body[data-bloom="2"] .bloom-b,
+body[data-bloom="3"] .bloom-a,
+body[data-bloom="3"] .bloom-b,
+body[data-bloom="3"] .bloom-c,
+body[data-bloom="4"] .bloom-a,
+body[data-bloom="4"] .bloom-b,
+body[data-bloom="4"] .bloom-c,
+body[data-bloom="4"] .bloom-d,
+body[data-bloom="5"] .bloom {
+  background: linear-gradient(90deg, var(--green), var(--teal));
+  box-shadow: 0 0 16px rgba(102, 234, 220, 0.32);
+  transform: scaleY(1.35);
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+}
+
+.primary-button,
+.secondary-button,
+.quiet-button,
+.pill-button {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 14px;
+  color: var(--text);
+  background: rgba(221, 248, 225, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.16);
+}
+
+.primary-button {
+  background: linear-gradient(135deg, rgba(126, 230, 168, 0.96), rgba(102, 234, 220, 0.82));
+  color: #03201f;
+  border-color: transparent;
+  font-weight: 800;
+  box-shadow: 0 14px 34px rgba(102, 234, 220, 0.2);
+}
+
+.secondary-button {
+  background: rgba(7, 39, 40, 0.72);
+}
+
+.quiet-button {
+  background: rgba(5, 24, 26, 0.62);
+  color: var(--muted);
+}
+
+.pill-button {
+  min-height: 44px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding-inline: 12px;
+  background: rgba(7, 39, 40, 0.76);
+  color: #dffbee;
+}
+
+button:disabled {
+  opacity: 0.45;
+}
+
+button:not(:disabled):active {
+  transform: translateY(1px);
+}
+
+.is-showing .garden {
+  box-shadow:
+    inset 0 0 82px rgba(4, 13, 14, 0.64),
+    0 0 42px rgba(131, 201, 255, 0.13),
+    0 28px 90px rgba(0, 0, 0, 0.24);
+}
+
+.is-input .garden {
+  box-shadow:
+    inset 0 0 88px rgba(4, 13, 14, 0.72),
+    0 0 48px rgba(126, 230, 168, 0.14),
+    0 28px 90px rgba(0, 0, 0, 0.24);
+}
+
+.mistake-flash .garden-stage::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  background: radial-gradient(circle, transparent 0 20%, rgba(2, 7, 8, 0.72) 68%);
+  animation: mistakePulse 740ms ease-out;
+}
+
+.success-glow .plant-shape {
+  animation: successGlow 780ms ease-out, breathe 3.8s ease-in-out infinite;
+}
+
+.paused .garden {
+  filter: grayscale(0.3) brightness(0.74);
+}
+
+.high-contrast {
+  --bg: #001316;
+  --bg-deep: #00090b;
+  --text: #ffffff;
+  --muted: #d7f9ef;
+  --line: rgba(255, 255, 255, 0.44);
+}
+
+.high-contrast .game-shell {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(126, 230, 168, 0.3), transparent 42%),
+    linear-gradient(180deg, #001d20 0%, #001316 54%, #00090b 100%);
+}
+
+.high-contrast .plant-shape {
+  filter: drop-shadow(0 0 20px var(--accent));
+}
+
+.high-contrast .mode-button.active,
+.high-contrast .primary-button {
+  outline: 2px solid #ffffff;
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.055);
+  }
+}
+
+@keyframes ripple {
+  0% {
+    opacity: 0.76;
+    transform: scale(0.35);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.18);
+  }
+}
+
+@keyframes trail {
+  0% {
+    opacity: 0.52;
+    transform: scale(0.68);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes mistakePulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.82);
+  }
+  32% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.22);
+  }
+}
+
+@keyframes successGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 12px color-mix(in srgb, var(--accent), transparent 46%));
+  }
+  45% {
+    filter: drop-shadow(0 0 28px var(--accent));
+    transform: scale(1.16);
+  }
+}
+
+@keyframes plantArtworkFlash {
+  0% {
+    opacity: 0.92;
+    transform: scale(1);
+  }
+  34% {
+    opacity: 1;
+    transform: scale(1.22);
+  }
+  100% {
+    opacity: 0.98;
+    transform: scale(1.08);
+  }
+}
+
+@media (max-width: 430px) {
+  .garden-stage {
+    grid-template-rows: auto auto auto minmax(300px, 1fr) auto auto;
+    gap: 7px;
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .brand-mark {
+    width: 32px;
+    height: 32px;
+  }
+
+  .brand p {
+    font-size: 0.76rem;
+    line-height: 1.25;
+  }
+
+  .mode-button {
+    min-height: 34px;
+    padding-inline: 4px;
+    font-size: 0.78rem;
+  }
+
+  .garden {
+    min-height: 300px;
+    border-radius: 24px;
+  }
+
+  .plant {
+    width: 104px;
+    height: 104px;
+  }
+
+  .plant-shape {
+    inset: 20px;
+  }
+
+  .primary-button,
+  .secondary-button,
+  .quiet-button {
+    min-height: 46px;
+    padding-inline: 10px;
+    font-size: 0.88rem;
+  }
+
+  .stats-row div {
+    min-height: 48px;
+    padding: 7px 6px;
+  }
+
+  .stats-row span {
+    font-size: 0.64rem;
+  }
+
+  .stats-row strong {
+    font-size: 1.08rem;
+  }
+
+  .bloom-meter {
+    grid-template-columns: repeat(5, 1fr);
+    min-height: 32px;
+  }
+
+  .bloom-meter strong {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+@media (min-width: 700px) {
+  .garden-stage {
+    grid-template-rows: auto auto auto minmax(470px, 1fr) auto auto;
+  }
+
+  .garden {
+    min-height: 500px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+}

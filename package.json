@@ -1,0 +1,10 @@
+{
+  "name": "echo-garden",
+  "version": "0.4.0",
+  "private": true,
+  "description": "Ramus mobilus atminties zaidimas apie sviesos ir garso sekas naktiniame sode.",
+  "scripts": {
+    "check": "node --check game.js && node --check service-worker.js && node scripts/validate-static.mjs",
+    "serve": "python -m http.server 4173"
+  }
+}
